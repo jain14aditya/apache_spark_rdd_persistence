@@ -160,14 +160,11 @@ def local_search(graph):
 # parsed_graph,node_names = parseDAG('dag2.txt')
 # print(parsed_graph)
 
-parsed_graph = {0:[1],1:[2,3,4,5],2:[6],3:[7],4:[8],5:[9],6:[10],7:[11],8:[12],9:[13],10:[14,15],
-11:[16,17],12:[18,19],13:[20,21],14:[22],15:[22],16:[22],17:[22],18:[22],19:[22],20:[22],21:[22],22:[]}
-node_names = {}
-for i in range(23):
-    node_names[i] = "" + chr(ord('a') + i)
+# parsed_graph = {0:[1],1:[2,3,4,5],2:[6],3:[7],4:[8],5:[9],6:[10],7:[11],8:[12],9:[13],10:[14,15],
+# 11:[16,17],12:[18,19],13:[20,21],14:[22],15:[22],16:[22],17:[22],18:[22],19:[22],20:[22],21:[22],22:[]}
+# node_names = {}
+# for i in range(23):
+#     node_names[i] = "" + chr(ord('a') + i)
 
-graph = Graph(parsed_graph,node_names)
-persist_map = local_search(graph)
-    
-dg.plot(parsed_graph,persist_map)
+
 

@@ -2,6 +2,7 @@ import sys
 from operator import add
 from pyspark.sql import SparkSession
 from pyspark import StorageLevel
+import sharp
 import time
 
 
@@ -24,10 +25,10 @@ ds6 = merged.filter(merged['id'] % 7 == 0)
 
 final = ds4.join(ds5,"id").join(ds6,"id")
 val = final.groupBy().sum()
-print(val.explain(mode="formatted"))
-
+# print(val.explain(mode="formatted"))
+sharp.optimize(val)
 start = time.time()
-print(val.show())
+# print(val.show())
 end = time.time()
 print("elapsed time : ",end - start)
 # while True:
