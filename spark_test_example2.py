@@ -1,4 +1,5 @@
 from pyspark.sql import SparkSession
+import sharp
 import time
 
 spark = SparkSession\
@@ -20,3 +21,4 @@ end = time.time()
 print("elapsed time : ",end - start)
 
 # print(sum.explain(mode="formatted"))
+sharp.optimize(sum)

@@ -1,4 +1,5 @@
 from pyspark.sql import SparkSession
+import sharp
 import time
 
 spark = SparkSession\
@@ -21,9 +22,7 @@ ds6 = merged.filter(merged['id'] % 7 == 0)
 final = ds4.join(ds5,"id").join(ds6,"id")
 val = final.groupBy().sum()
 
-
 start = time.time()
-print(val.show())
+sharp.optimize(val)
 end = time.time()
 print("elapsed time : ",end - start)
-# print(val.explain(mode="formatted"))

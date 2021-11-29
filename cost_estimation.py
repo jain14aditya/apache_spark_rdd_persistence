@@ -115,13 +115,15 @@ def local_search(graph):
     nodes_with_2_childs.sort(key = lambda x: x[1], reverse = True)
     cnt = len(nodes_with_2_childs)
 
-    if cnt == 0:
-    	return {}
-
-    state_length = max(min_limit_of_nodes, cnt)
+    state_length = cnt
 
     # form initial state of persist map
     persistable_list = [x[0] for x in nodes_with_2_childs][:state_length]
+
+    if state_length < number_of_nodes_to_persist:
+        persistable_state = [1] * state_length
+        return get_persist_map(persistable_state,persistable_list)
+
     persistable_state = [1] * number_of_nodes_to_persist + [0] * (state_length - number_of_nodes_to_persist)
     
     itr = 0
@@ -160,14 +162,11 @@ def local_search(graph):
 # parsed_graph,node_names = parseDAG('dag2.txt')
 # print(parsed_graph)
 
-parsed_graph = {0:[1],1:[2,3,4,5],2:[6],3:[7],4:[8],5:[9],6:[10],7:[11],8:[12],9:[13],10:[14,15],
-11:[16,17],12:[18,19],13:[20,21],14:[22],15:[22],16:[22],17:[22],18:[22],19:[22],20:[22],21:[22],22:[]}
-node_names = {}
-for i in range(23):
-    node_names[i] = "" + chr(ord('a') + i)
+# parsed_graph = {0:[1],1:[2,3,4,5],2:[6],3:[7],4:[8],5:[9],6:[10],7:[11],8:[12],9:[13],10:[14,15],
+# 11:[16,17],12:[18,19],13:[20,21],14:[22],15:[22],16:[22],17:[22],18:[22],19:[22],20:[22],21:[22],22:[]}
+# node_names = {}
+# for i in range(23):
+#     node_names[i] = "" + chr(ord('a') + i)
 
-graph = Graph(parsed_graph,node_names)
-persist_map = local_search(graph)
-    
-dg.plot(parsed_graph,persist_map)
+
 

@@ -2,41 +2,25 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import when
 from pyspark.sql.functions import udf
 from pyspark.sql.types import BooleanType
-from pyspark.sql.types import IntegerType
 import pyspark.sql.functions as f
+import sharp
 
 import time
-
-# def check(val,x):
-#     when(( x == val) | (val % x != 0), True)
-#     when(( x != val) & (val % x == 0), False)
-
-def check(val,x):
-    if x == val or val % x != 0:
-        return True
-    else:
-        return False
 
 spark = SparkSession\
         .builder\
         .appName("Test3")\
         .getOrCreate()
 
-check_udf = udf(check,BooleanType())
-
 N = 10000
 df1 = spark.range(2,N)
 
-x = 2
-df2 = df1.filter((f.col('id') == x) | (f.col('id') % x != 0))
+df2 = df1.filter((f.col('id') == 2) | (f.col('id') % 2 != 0))
 
-x = 3
-df3 = df2.filter((f.col('id') == x) | (f.col('id') % x != 0))
+df3 = df2.filter((f.col('id') == 3) | (f.col('id') % 3 != 0))
 
-x = 5
-df5 = df3.filter((f.col('id') == x) | (f.col('id') % x != 0))
+df5 = df3.filter((f.col('id') == 5) | (f.col('id') % 5 != 0))
 
-x = 7
 df7 = df5.filter((f.col('id') == 7) | (f.col('id') % 7 != 0))
 df11 = df5.filter((f.col('id') == 11) | (f.col('id') % 11 != 0))
 df13 = df5.filter((f.col('id') == 13) | (f.col('id') % 13 != 0))
@@ -64,4 +48,6 @@ start = time.time()
 print(final.show())
 end = time.time()
 print("elapsed time : ",end - start)
-print(final.explain(mode="formatted"))
+
+# print(final.explain(mode="formatted"))
+sharp.optimize(final)

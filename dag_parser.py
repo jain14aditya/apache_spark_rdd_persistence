@@ -29,10 +29,6 @@ def process_graph(start_line, lines):
 
     plus_pos = next_line.find("+-")
     colon_pos = next_line.find(":-")
-    l1_name, l1_num = getDetailsFromLine(line)
-    l2_name, l2_num = getDetailsFromLine(next_line)
-
-    print(l1_num, l2_num, curr_pos, plus_pos, colon_pos)
 
     if plus_pos == -1 and colon_pos == -1:
         return
@@ -41,6 +37,10 @@ def process_graph(start_line, lines):
         return
     if colon_pos != -1 and colon_pos <= curr_pos:
         return
+
+    l1_name, l1_num = getDetailsFromLine(line)
+    l2_name, l2_num = getDetailsFromLine(next_line)
+    # print(l1_num, l2_num, curr_pos, plus_pos, colon_pos)
 
     vertex_map[l1_num] = l1_name
     vertex_map[l2_num] = l2_name
@@ -87,7 +87,7 @@ def prune_edges(vertex):
 def parseDAG(filename):
     with open(filename) as f:
         lines = f.readlines()
-        process_graph(0, lines)
+        process_graph(1, lines)
 
     od = collections.OrderedDict(sorted(vertex_map.items()))
     # for k, v in od.items():
@@ -111,6 +111,7 @@ def parseDAG(filename):
         prune_edges(vertex)
         new_graph[vertex] = graph[vertex]
 
+    print(new_graph, vertex_map)
     return new_graph,vertex_map
 
 if __name__ == "main":
