@@ -115,13 +115,15 @@ def local_search(graph):
     nodes_with_2_childs.sort(key = lambda x: x[1], reverse = True)
     cnt = len(nodes_with_2_childs)
 
-    if cnt == 0:
-    	return {}
-
-    state_length = max(min_limit_of_nodes, cnt)
+    state_length = cnt
 
     # form initial state of persist map
     persistable_list = [x[0] for x in nodes_with_2_childs][:state_length]
+
+    if state_length < number_of_nodes_to_persist:
+        persistable_state = [1] * state_length
+        return get_persist_map(persistable_state,persistable_list)
+
     persistable_state = [1] * number_of_nodes_to_persist + [0] * (state_length - number_of_nodes_to_persist)
     
     itr = 0
