@@ -17,5 +17,6 @@ def optimize(df):
 
     graph = cost_estimation.Graph(parsed_graph,node_names)
     persist_map = cost_estimation.local_search(graph)
+    print("nodes to be persisted: ",persist_map)
 
     dg.plot(parsed_graph,persist_map)

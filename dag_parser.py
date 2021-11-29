@@ -40,7 +40,6 @@ def process_graph(start_line, lines):
 
     l1_name, l1_num = getDetailsFromLine(line)
     l2_name, l2_num = getDetailsFromLine(next_line)
-    # print(l1_num, l2_num, curr_pos, plus_pos, colon_pos)
 
     vertex_map[l1_num] = l1_name
     vertex_map[l2_num] = l2_name
@@ -75,6 +74,7 @@ def make_supported_vertices() :
         for so in supported_operations:
             if so in vertex_map[vertex].lower():
                 supported_vertices.add(vertex)
+                vertex_map[vertex] = so
 
 def prune_edges(vertex):
     for child in graph[vertex]:
@@ -90,18 +90,6 @@ def parseDAG(filename):
         process_graph(1, lines)
 
     od = collections.OrderedDict(sorted(vertex_map.items()))
-    # for k, v in od.items():
-    #     print(k, v)
-
-    # print(len(vertex_map))
-    # print(vertex_map)
-    # print(edges_list)
-
-    # for vertex in vertex_map.keys():
-    #     print(vertex)
-
-    # for edges in edges_list:
-    #     print(edges[1], edges[0])
 
     make_graph(edges_list)
 

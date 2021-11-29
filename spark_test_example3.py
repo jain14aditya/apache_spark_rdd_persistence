@@ -3,6 +3,8 @@ from pyspark.sql.functions import when
 from pyspark.sql.functions import udf
 from pyspark.sql.types import BooleanType
 import pyspark.sql.functions as f
+from pyspark import StorageLevel
+
 import sharp
 
 import time
@@ -12,7 +14,7 @@ spark = SparkSession\
         .appName("Test3")\
         .getOrCreate()
 
-N = 10000
+N = 1000000
 df1 = spark.range(2,N)
 
 df2 = df1.filter((f.col('id') == 2) | (f.col('id') % 2 != 0))
@@ -20,6 +22,7 @@ df2 = df1.filter((f.col('id') == 2) | (f.col('id') % 2 != 0))
 df3 = df2.filter((f.col('id') == 3) | (f.col('id') % 3 != 0))
 
 df5 = df3.filter((f.col('id') == 5) | (f.col('id') % 5 != 0))
+# df5.persist(StorageLevel.MEMORY_ONLY)
 
 df7 = df5.filter((f.col('id') == 7) | (f.col('id') % 7 != 0))
 df11 = df5.filter((f.col('id') == 11) | (f.col('id') % 11 != 0))
