@@ -1,216 +1,268 @@
 == Physical Plan ==
-AdaptiveSparkPlan (32)
-+- HashAggregate (31)
-   +- Exchange (30)
-      +- HashAggregate (29)
-         +- Project (28)
-            +- SortMergeJoin Inner (27)
-               :- Project (21)
-               :  +- SortMergeJoin Inner (20)
+AdaptiveSparkPlan (50)
++- HashAggregate (49)
+   +- Exchange (48)
+      +- HashAggregate (47)
+         +- Project (46)
+            +- SortMergeJoin Inner (45)
+               :- Project (30)
+               :  +- SortMergeJoin Inner (29)
                :     :- Sort (14)
                :     :  +- Exchange (13)
-               :     :     +- Filter (12)
-               :     :        +- InMemoryTableScan (1)
-               :     :              +- InMemoryRelation (2)
-               :     :                    +- * Project (11)
-               :     :                       +- * BroadcastHashJoin Inner BuildRight (10)
-               :     :                          :- * Project (7)
-               :     :                          :  +- * BroadcastHashJoin Inner BuildRight (6)
-               :     :                          :     :- * Range (3)
-               :     :                          :     +- BroadcastExchange (5)
-               :     :                          :        +- * Range (4)
-               :     :                          +- BroadcastExchange (9)
-               :     :                             +- * Range (8)
-               :     +- Sort (19)
-               :        +- Exchange (18)
-               :           +- Filter (17)
-               :              +- InMemoryTableScan (15)
-               :                    +- InMemoryRelation (16)
-               :                          +- * Project (11)
-               :                             +- * BroadcastHashJoin Inner BuildRight (10)
-               :                                :- * Project (7)
-               :                                :  +- * BroadcastHashJoin Inner BuildRight (6)
-               :                                :     :- * Range (3)
-               :                                :     +- BroadcastExchange (5)
-               :                                :        +- * Range (4)
-               :                                +- BroadcastExchange (9)
-               :                                   +- * Range (8)
-               +- Sort (26)
-                  +- Exchange (25)
-                     +- Filter (24)
-                        +- InMemoryTableScan (22)
-                              +- InMemoryRelation (23)
-                                    +- * Project (11)
-                                       +- * BroadcastHashJoin Inner BuildRight (10)
-                                          :- * Project (7)
-                                          :  +- * BroadcastHashJoin Inner BuildRight (6)
-                                          :     :- * Range (3)
-                                          :     +- BroadcastExchange (5)
-                                          :        +- * Range (4)
-                                          +- BroadcastExchange (9)
-                                             +- * Range (8)
+               :     :     +- Project (12)
+               :     :        +- BroadcastHashJoin Inner BuildRight (11)
+               :     :           :- Project (7)
+               :     :           :  +- BroadcastHashJoin Inner BuildRight (6)
+               :     :           :     :- Filter (2)
+               :     :           :     :  +- Range (1)
+               :     :           :     +- BroadcastExchange (5)
+               :     :           :        +- Filter (4)
+               :     :           :           +- Range (3)
+               :     :           +- BroadcastExchange (10)
+               :     :              +- Filter (9)
+               :     :                 +- Range (8)
+               :     +- Sort (28)
+               :        +- Exchange (27)
+               :           +- Project (26)
+               :              +- BroadcastHashJoin Inner BuildRight (25)
+               :                 :- Project (21)
+               :                 :  +- BroadcastHashJoin Inner BuildRight (20)
+               :                 :     :- Filter (16)
+               :                 :     :  +- Range (15)
+               :                 :     +- BroadcastExchange (19)
+               :                 :        +- Filter (18)
+               :                 :           +- Range (17)
+               :                 +- BroadcastExchange (24)
+               :                    +- Filter (23)
+               :                       +- Range (22)
+               +- Sort (44)
+                  +- Exchange (43)
+                     +- Project (42)
+                        +- BroadcastHashJoin Inner BuildRight (41)
+                           :- Project (37)
+                           :  +- BroadcastHashJoin Inner BuildRight (36)
+                           :     :- Filter (32)
+                           :     :  +- Range (31)
+                           :     +- BroadcastExchange (35)
+                           :        +- Filter (34)
+                           :           +- Range (33)
+                           +- BroadcastExchange (40)
+                              +- Filter (39)
+                                 +- Range (38)
 
 
-(1) InMemoryTableScan
+(1) Range
 Output [1]: [id#0L]
-Arguments: [id#0L], [((id#0L % 5) = 0), ((id#0L % 6) = 0), ((id#0L % 7) = 0)]
+Arguments: Range (0, 1000000, step=2, splits=Some(8))
 
-(2) InMemoryRelation
-Arguments: [id#0L], CachedRDDBuilder(org.apache.spark.sql.execution.columnar.DefaultCachedBatchSerializer@1a7b98fd,StorageLevel(memory, 1 replicas),*(3) Project [id#0L]
-+- *(3) BroadcastHashJoin [id#0L], [id#4L], Inner, BuildRight, false
-   :- *(3) Project [id#0L]
-   :  +- *(3) BroadcastHashJoin [id#0L], [id#2L], Inner, BuildRight, false
-   :     :- *(3) Range (0, 100000, step=2, splits=8)
-   :     +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#35]
-   :        +- *(1) Range (0, 100000, step=3, splits=8)
-   +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#40]
-      +- *(2) Range (0, 100000, step=4, splits=8)
-,None)
+(2) Filter
+Input [1]: [id#0L]
+Condition : (((id#0L % 5) = 0) AND (((id#0L % 6) = 0) AND ((id#0L % 7) = 0)))
 
-(3) Range [codegen id : 3]
-Output [1]: [id#0L]
-Arguments: Range (0, 100000, step=2, splits=Some(8))
-
-(4) Range [codegen id : 1]
+(3) Range
 Output [1]: [id#2L]
-Arguments: Range (0, 100000, step=3, splits=Some(8))
+Arguments: Range (0, 1000000, step=3, splits=Some(8))
+
+(4) Filter
+Input [1]: [id#2L]
+Condition : ((id#2L % 5) = 0)
 
 (5) BroadcastExchange
 Input [1]: [id#2L]
-Arguments: HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#35]
+Arguments: HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#143]
 
-(6) BroadcastHashJoin [codegen id : 3]
+(6) BroadcastHashJoin
 Left keys [1]: [id#0L]
 Right keys [1]: [id#2L]
 Join condition: None
 
-(7) Project [codegen id : 3]
+(7) Project
 Output [1]: [id#0L]
 Input [2]: [id#0L, id#2L]
 
-(8) Range [codegen id : 2]
+(8) Range
 Output [1]: [id#4L]
-Arguments: Range (0, 100000, step=4, splits=Some(8))
+Arguments: Range (0, 1000000, step=4, splits=Some(8))
 
-(9) BroadcastExchange
+(9) Filter
 Input [1]: [id#4L]
-Arguments: HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#40]
+Condition : ((id#4L % 5) = 0)
 
-(10) BroadcastHashJoin [codegen id : 3]
+(10) BroadcastExchange
+Input [1]: [id#4L]
+Arguments: HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#147]
+
+(11) BroadcastHashJoin
 Left keys [1]: [id#0L]
 Right keys [1]: [id#4L]
 Join condition: None
 
-(11) Project [codegen id : 3]
+(12) Project
 Output [1]: [id#0L]
 Input [2]: [id#0L, id#4L]
 
-(12) Filter
-Input [1]: [id#0L]
-Condition : ((((id#0L % 5) = 0) AND ((id#0L % 6) = 0)) AND ((id#0L % 7) = 0))
-
 (13) Exchange
 Input [1]: [id#0L]
-Arguments: hashpartitioning(id#0L, 200), ENSURE_REQUIREMENTS, [id=#93]
+Arguments: hashpartitioning(id#0L, 200), ENSURE_REQUIREMENTS, [id=#159]
 
 (14) Sort
 Input [1]: [id#0L]
 Arguments: [id#0L ASC NULLS FIRST], false, 0
 
-(15) InMemoryTableScan
-Output [1]: [id#13L]
-Arguments: [id#13L], [((id#13L % 6) = 0), ((id#13L % 5) = 0)]
+(15) Range
+Output [1]: [id#8L]
+Arguments: Range (0, 1000000, step=2, splits=Some(8))
 
-(16) InMemoryRelation
-Arguments: [id#13L], CachedRDDBuilder(org.apache.spark.sql.execution.columnar.DefaultCachedBatchSerializer@1a7b98fd,StorageLevel(memory, 1 replicas),*(3) Project [id#0L]
-+- *(3) BroadcastHashJoin [id#0L], [id#4L], Inner, BuildRight, false
-   :- *(3) Project [id#0L]
-   :  +- *(3) BroadcastHashJoin [id#0L], [id#2L], Inner, BuildRight, false
-   :     :- *(3) Range (0, 100000, step=2, splits=8)
-   :     +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#35]
-   :        +- *(1) Range (0, 100000, step=3, splits=8)
-   +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#40]
-      +- *(2) Range (0, 100000, step=4, splits=8)
-,None)
+(16) Filter
+Input [1]: [id#8L]
+Condition : (((id#8L % 6) = 0) AND ((id#8L % 5) = 0))
 
-(17) Filter
-Input [1]: [id#13L]
-Condition : (((id#13L % 6) = 0) AND ((id#13L % 5) = 0))
+(17) Range
+Output [1]: [id#9L]
+Arguments: Range (0, 1000000, step=3, splits=Some(8))
 
-(18) Exchange
-Input [1]: [id#13L]
-Arguments: hashpartitioning(id#13L, 200), ENSURE_REQUIREMENTS, [id=#94]
+(18) Filter
+Input [1]: [id#9L]
+Condition : ((id#9L % 6) = 0)
 
-(19) Sort
-Input [1]: [id#13L]
-Arguments: [id#13L ASC NULLS FIRST], false, 0
+(19) BroadcastExchange
+Input [1]: [id#9L]
+Arguments: HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#150]
 
-(20) SortMergeJoin
-Left keys [1]: [id#0L]
-Right keys [1]: [id#13L]
+(20) BroadcastHashJoin
+Left keys [1]: [id#8L]
+Right keys [1]: [id#9L]
 Join condition: None
 
 (21) Project
-Output [1]: [id#0L]
-Input [2]: [id#0L, id#13L]
+Output [1]: [id#8L]
+Input [2]: [id#8L, id#9L]
 
-(22) InMemoryTableScan
-Output [1]: [id#17L]
-Arguments: [id#17L], [((id#17L % 7) = 0), ((id#17L % 5) = 0), ((id#17L % 6) = 0)]
+(22) Range
+Output [1]: [id#10L]
+Arguments: Range (0, 1000000, step=4, splits=Some(8))
 
-(23) InMemoryRelation
-Arguments: [id#17L], CachedRDDBuilder(org.apache.spark.sql.execution.columnar.DefaultCachedBatchSerializer@1a7b98fd,StorageLevel(memory, 1 replicas),*(3) Project [id#0L]
-+- *(3) BroadcastHashJoin [id#0L], [id#4L], Inner, BuildRight, false
-   :- *(3) Project [id#0L]
-   :  +- *(3) BroadcastHashJoin [id#0L], [id#2L], Inner, BuildRight, false
-   :     :- *(3) Range (0, 100000, step=2, splits=8)
-   :     +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#35]
-   :        +- *(1) Range (0, 100000, step=3, splits=8)
-   +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#40]
-      +- *(2) Range (0, 100000, step=4, splits=8)
-,None)
+(23) Filter
+Input [1]: [id#10L]
+Condition : ((id#10L % 6) = 0)
 
-(24) Filter
-Input [1]: [id#17L]
-Condition : ((((id#17L % 7) = 0) AND ((id#17L % 5) = 0)) AND ((id#17L % 6) = 0))
+(24) BroadcastExchange
+Input [1]: [id#10L]
+Arguments: HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#154]
 
-(25) Exchange
-Input [1]: [id#17L]
-Arguments: hashpartitioning(id#17L, 200), ENSURE_REQUIREMENTS, [id=#101]
-
-(26) Sort
-Input [1]: [id#17L]
-Arguments: [id#17L ASC NULLS FIRST], false, 0
-
-(27) SortMergeJoin
-Left keys [1]: [id#0L]
-Right keys [1]: [id#17L]
+(25) BroadcastHashJoin
+Left keys [1]: [id#8L]
+Right keys [1]: [id#10L]
 Join condition: None
 
-(28) Project
-Output [1]: [id#0L]
-Input [2]: [id#0L, id#17L]
+(26) Project
+Output [1]: [id#8L]
+Input [2]: [id#8L, id#10L]
 
-(29) HashAggregate
+(27) Exchange
+Input [1]: [id#8L]
+Arguments: hashpartitioning(id#8L, 200), ENSURE_REQUIREMENTS, [id=#160]
+
+(28) Sort
+Input [1]: [id#8L]
+Arguments: [id#8L ASC NULLS FIRST], false, 0
+
+(29) SortMergeJoin
+Left keys [1]: [id#0L]
+Right keys [1]: [id#8L]
+Join condition: None
+
+(30) Project
+Output [1]: [id#0L]
+Input [2]: [id#0L, id#8L]
+
+(31) Range
+Output [1]: [id#12L]
+Arguments: Range (0, 1000000, step=2, splits=Some(8))
+
+(32) Filter
+Input [1]: [id#12L]
+Condition : (((id#12L % 7) = 0) AND (((id#12L % 5) = 0) AND ((id#12L % 6) = 0)))
+
+(33) Range
+Output [1]: [id#13L]
+Arguments: Range (0, 1000000, step=3, splits=Some(8))
+
+(34) Filter
+Input [1]: [id#13L]
+Condition : ((id#13L % 7) = 0)
+
+(35) BroadcastExchange
+Input [1]: [id#13L]
+Arguments: HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#165]
+
+(36) BroadcastHashJoin
+Left keys [1]: [id#12L]
+Right keys [1]: [id#13L]
+Join condition: None
+
+(37) Project
+Output [1]: [id#12L]
+Input [2]: [id#12L, id#13L]
+
+(38) Range
+Output [1]: [id#14L]
+Arguments: Range (0, 1000000, step=4, splits=Some(8))
+
+(39) Filter
+Input [1]: [id#14L]
+Condition : ((id#14L % 7) = 0)
+
+(40) BroadcastExchange
+Input [1]: [id#14L]
+Arguments: HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#169]
+
+(41) BroadcastHashJoin
+Left keys [1]: [id#12L]
+Right keys [1]: [id#14L]
+Join condition: None
+
+(42) Project
+Output [1]: [id#12L]
+Input [2]: [id#12L, id#14L]
+
+(43) Exchange
+Input [1]: [id#12L]
+Arguments: hashpartitioning(id#12L, 200), ENSURE_REQUIREMENTS, [id=#174]
+
+(44) Sort
+Input [1]: [id#12L]
+Arguments: [id#12L ASC NULLS FIRST], false, 0
+
+(45) SortMergeJoin
+Left keys [1]: [id#0L]
+Right keys [1]: [id#12L]
+Join condition: None
+
+(46) Project
+Output [1]: [id#0L]
+Input [2]: [id#0L, id#12L]
+
+(47) HashAggregate
 Input [1]: [id#0L]
 Keys: []
 Functions [1]: [partial_sum(id#0L)]
-Aggregate Attributes [1]: [sum#70L]
-Results [1]: [sum#71L]
+Aggregate Attributes [1]: [sum#20L]
+Results [1]: [sum#21L]
 
-(30) Exchange
-Input [1]: [sum#71L]
-Arguments: SinglePartition, ENSURE_REQUIREMENTS, [id=#107]
+(48) Exchange
+Input [1]: [sum#21L]
+Arguments: SinglePartition, ENSURE_REQUIREMENTS, [id=#180]
 
-(31) HashAggregate
-Input [1]: [sum#71L]
+(49) HashAggregate
+Input [1]: [sum#21L]
 Keys: []
 Functions [1]: [sum(id#0L)]
-Aggregate Attributes [1]: [sum(id#0L)#22L]
-Results [1]: [sum(id#0L)#22L AS sum(id)#23L]
+Aggregate Attributes [1]: [sum(id#0L)#17L]
+Results [1]: [sum(id#0L)#17L AS sum(id)#18L]
 
-(32) AdaptiveSparkPlan
-Output [1]: [sum(id)#23L]
+(50) AdaptiveSparkPlan
+Output [1]: [sum(id)#18L]
 Arguments: isFinalPlan=false
 
 

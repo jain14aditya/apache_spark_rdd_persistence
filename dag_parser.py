@@ -99,7 +99,7 @@ def parseDAG(filename):
         prune_edges(vertex)
         new_graph[vertex] = graph[vertex]
 
-    print(new_graph, vertex_map)
+    # print(new_graph, vertex_map)
     return new_graph,vertex_map
 
 if __name__ == "main":

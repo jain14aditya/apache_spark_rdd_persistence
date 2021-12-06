@@ -15,7 +15,7 @@ ds2 = spark.range(0,N,3)
 ds3 = spark.range(0,N,4)
 
 merged = ds1.join(ds2,"id").join(ds3,"id")
-# merged.persist(StorageLevel.MEMORY_ONLY)
+merged.persist(StorageLevel.MEMORY_ONLY)
 
 ds4 = merged.filter(merged['id'] % 5 == 0)
 ds5 = merged.filter(merged['id'] % 6 == 0)

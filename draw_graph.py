@@ -17,8 +17,7 @@ options = {
 }
 
 def plot(graph_adj_list,persist_map,name_map=[],show=False,out_filename='graph.png'):
-	g = nx.Graph()
-
+	g = nx.DiGraph()
 
 	parent_map = defaultdict(list)
 	for k,v in graph_adj_list.items():
